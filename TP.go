@@ -83,18 +83,24 @@ func Ft_profit(prices []int) int {
 }
 
 func Ft_max_substring(s string) int {
-	charIndex := make(map[byte]int)
-	maxLength, start := 0, 0
+	start, maxLen := 0, 0
+	pos := make([]int, 256)
 
-	for i := 0; i < len(s); i++ {
-		if index, ok := charIndex[s[i]]; ok && index >= start {
-			start = index + 1
-		}
-		charIndex[s[i]] = i
-		maxLength = max(maxLength, i-start+1)
+	for i := range pos {
+		pos[i] = -1 // initialise avec -1 pour marquer les caractères non vus
 	}
 
-	return maxLength
+	for i := 0; i < len(s); i++ {
+		if pos[s[i]] >= start {
+			start = pos[s[i]] + 1
+		}
+		pos[s[i]] = i
+		if i-start+1 > maxLen {
+			maxLen = i - start + 1
+		}
+	}
+
+	return maxLen
 }
 
 func max(a, b int) int {
